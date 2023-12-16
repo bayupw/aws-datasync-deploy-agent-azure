@@ -49,15 +49,9 @@ echo -e "\033[0;33mArgument vm_name is $vm_name\033[0m"
 AZCOPY_VERSION=v10
 
 function download_and_install_dependencies () {
-    echo -e "[azure-cli]
-name=Azure CLI
-baseurl=https://packages.microsoft.com/yumrepos/azure-cli
-enabled=1
-gpgcheck=1
-gpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/apt/sources.list.d/azure-cli.list > /dev/null
+    curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
     sudo apt-get update
     sudo apt-get install -y qemu-utils jq unzip
-    curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
     echo "\033[0;33mWarning azcopy will be downloaded from Internet but there is no integrity hash available.\033[0;33m"
     curl -Ls "https://aka.ms/downloadazcopy-$AZCOPY_VERSION-linux" -o /tmp/azcopy.tar.gz
     tar xzf /tmp/azcopy.tar.gz --directory /tmp || { echo "AzCopy download or extraction failed"; exit 1; }
